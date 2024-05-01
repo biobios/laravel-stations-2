@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Models\Genre;
 use App\Models\Schedule;
 
@@ -33,6 +34,37 @@ class Movie extends Model
     public function schedules()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    /**
+     * 新しい映画を作成する
+     * ジャンルが存在しない場合は新しく作成する
+     * もし映画の作成に失敗したら、ジャンルも作成しない
+     * 
+     * @param array $attributes
+     * @return \App\Models\Movie
+     */
+    public static function create(array $attributes = [])
+    {
+        return DB::transaction(function () use ($attributes) {
+            return static::query()->create($attributes);
+        });
+    }
+
+    /**
+     * 映画情報を更新する
+     * ジャンルが存在しない場合は新しく作成する
+     * もし映画の更新に失敗したら、ジャンルも作成しない
+     * 
+     * @param array $attributes
+     * @param array $options
+     * @return bool
+     */
+    public function update(array $attributes = [], array $options = [])
+    {
+        return DB::transaction(function () use ($attributes, $options) {
+            return parent::update($attributes, $options);
+        });
     }
 
     /**

@@ -28,9 +28,7 @@ class AdminMovieController extends Controller
 
     public function store(CreateMovieRequest $request)
     {
-        DB::transaction(function () use ($request) {
-            Movie::create($request->validated());
-        });
+        Movie::create($request->validated());
 
         return redirect('admin/movies');
     }
@@ -43,9 +41,7 @@ class AdminMovieController extends Controller
     public function update(Movie $movie, UpdateMovieRequest $request)
     {
 
-        DB::transaction(function () use ($request, $movie) {
-            $movie->update($request->validated());
-        });
+        $movie->update($request->validated());
 
         return redirect('admin/movies');
     }
