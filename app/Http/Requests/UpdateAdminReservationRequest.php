@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Schedule;
+use App\Models\Reservation;
 
 class UpdateAdminReservationRequest extends FormRequest
 {
@@ -16,6 +18,16 @@ class UpdateAdminReservationRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        if($this->has('schedule_id')){
+            $schedule = Schedule::find($this->schedule_id);
+            if($schedule){
+                $this->merge(['movie_id' => $schedule->movie_id, 'date' => $schedule->start_time_date]);
+            }
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,8 +37,17 @@ class UpdateAdminReservationRequest extends FormRequest
     {
         return [
             'movie_id' => ['required'],
+            'date' => ['required', 'date_format:Y-m-d'],
             'schedule_id' => ['required'],
-            'sheet_id' => ['required'],
+            'sheet_id' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $alreadyReserved = Reservation::where('schedule_id', $this->schedule_id)->where('sheet_id', $value)->first();
+                    if($alreadyReserved && $alreadyReserved->id != $this->id){
+                        $fail('その座席はすでに予約されています。');
+                    }
+                },
+            ],
             'name' => ['required'],
             'email' => ['required', 'email:strict,dns'],
         ];

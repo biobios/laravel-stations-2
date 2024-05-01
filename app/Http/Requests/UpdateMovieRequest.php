@@ -17,6 +17,25 @@ class UpdateMovieRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation()
+    {
+        // $this->merge([
+        //     'is_showing' => $this->has('is_showing') && $this->is_showing !== 'false'
+        // ]);
+
+        if($this->has('is_showing') && $this->is_showing !== null){
+            $this->merge([
+                'is_showing' => $this->is_showing !== 'false'
+            ]);
+        }
+
+        if(!$this->has('id')){
+            $this->merge([
+                'id' => $this->route('movie')->id
+            ]);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,6 +44,7 @@ class UpdateMovieRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => ['required', 'exists:movies'],
             'title' => ['required', Rule::unique('movies')->ignore($this->id)],
             'image_url' => ['required', 'url'],
             'published_year' => ['required', 'gte:1900'],

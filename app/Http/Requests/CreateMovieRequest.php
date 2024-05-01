@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Movie;
 
 class CreateMovieRequest extends FormRequest
 {
@@ -14,6 +15,19 @@ class CreateMovieRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    public function prepareForValidation()
+    {
+        // $this->merge([
+        //     'is_showing' => $this->has('is_showing') && $this->is_showing !== 'false'
+        // ]);
+
+        if($this->has('is_showing') && $this->is_showing !== null){
+            $this->merge([
+                'is_showing' => $this->is_showing !== 'false'
+            ]);
+        }
     }
 
     /**
@@ -32,4 +46,5 @@ class CreateMovieRequest extends FormRequest
             'genre' => ['required'],
         ];
     }
+
 }
