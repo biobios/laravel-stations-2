@@ -26,6 +26,7 @@ class Movie extends Model
         'genre',
     ];
 
+    // リレーションの定義
     public function genre()
     {
         return $this->belongsTo(Genre::class);
@@ -67,6 +68,8 @@ class Movie extends Model
         });
     }
 
+    // スコープメソッドの定義
+
     /**
      * タイトルか概要にキーワードを含む映画を検索する
      *
@@ -80,22 +83,19 @@ class Movie extends Model
             ->orWhere('description', 'like', '%' . $keyword . '%');
     }
 
-    public function scopeFilterByIsShowing($query, $is_showing)
+    /**
+     * 上映中か上映予定の映画を検索する
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param bool $is_showing
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeMatchByIsShowing($query, $is_showing)
     {
         return $query->where('is_showing', $is_showing);
     }
 
-    // public function __set($key, $value)
-    // {
-    //     // genreだったら、genre_idに変換する
-    //     if ($key === 'genre'){
-    //         $genre = Genre::firstOrCreate(['name' => $value]);
-    //         $this->genre_id = $genre->id;
-    //         return;
-    //     }
-
-    //     parent::__set($key, $value);
-    // }
+    // アクセサの定義
 
     public function setGenreAttribute($value)
     {

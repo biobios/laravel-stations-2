@@ -49,7 +49,7 @@ class SearchMovieRequest extends FormRequest
         }
 
         if($this->doFilterByIsShowing){
-            $query->filterByIsShowing($this->is_showing);
+            $query->matchByIsShowing($this->is_showing);
         }
 
         return $query;
