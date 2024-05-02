@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class Schedule extends Model
 {
@@ -14,6 +16,7 @@ class Schedule extends Model
         'start_time',
         'end_time',
         'movie_id',
+        'screen_id',
         'start_time_date',
         'start_time_time',
         'end_time_date',
@@ -38,6 +41,34 @@ class Schedule extends Model
         $this->end_time = new Carbon();
     
         parent::__construct($attributes);
+    }
+
+    /**
+     * 
+     */
+    public function save(array $options = [])
+    {
+        return DB::transaction(function () use ($options) {
+
+            $saved = parent::save($options);
+            if (!$saved) return false;
+
+            $sql = Schedule::where('id', '<>', $this->id)
+            ->where('screen_id', $this->screen_id)
+            ->where('start_time', '<', $this->end_time->format('Y-m-d H:i:s'))
+            ->where('end_time', '>', $this->start_time->format('Y-m-d H:i:s'));
+
+            if($sql->exists()) {
+
+                throw new HttpResponseException(
+                    redirect()->back()
+                        ->withInput()
+                        ->withErrors(['screen_id' => 'スケジュールが重複しています'])
+                );
+            }
+
+            return true;
+        });
     }
 
     public function movie()

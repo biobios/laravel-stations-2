@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Movie;
 use App\Models\Schedule;
+use App\Models\Screen;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateScheduleRequest;
 use App\Http\Requests\UpdateScheduleRequest;
@@ -24,7 +25,8 @@ class AdminScheduleController extends Controller
 
     public function create(Movie $movie)
     {
-        return view('admin.schedules.create', compact('movie'));
+        $screens = Screen::all();
+        return view('admin.schedules.create', compact('movie', 'screens'));
     }
 
     public function store(CreateScheduleRequest $request, Movie $movie)
@@ -36,7 +38,8 @@ class AdminScheduleController extends Controller
 
     public function edit(Schedule $schedule)
     {
-        return view('admin.schedules.edit', compact('schedule'));
+        $screens = Screen::all();
+        return view('admin.schedules.edit', compact('schedule', 'screens'));
     }
 
     public function update(UpdateScheduleRequest $request, Schedule $schedule)

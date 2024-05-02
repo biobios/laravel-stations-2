@@ -17,6 +17,7 @@ class ScheduleFactory extends Factory
     {
         return [
             'movie_id' => Movie::factory(),
+            'screen_id' => $this->faker->numberBetween(1, 3),
             'start_time' => CarbonImmutable::now(),
             'end_time' => CarbonImmutable::now()->addHours(2),
         ];

@@ -9,6 +9,11 @@ class Sheet extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'row',
+        'column',
+    ];
+
     protected $appends = ['location_string'];
 
     public static function fetchSheetsByGrid()

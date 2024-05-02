@@ -12,6 +12,15 @@
         @csrf
         <input type="hidden" name="movie_id" value="{{ $movie->id }}">
         <div>
+            <label for="screen_id">スクリーン</label>
+            <select name="screen_id" id="screen_id">
+                @foreach ($screens as $screen)
+                    <option value="{{ $screen->id }}">{{ $screen->name }}</option>
+                @endforeach
+            </select>
+            <span style="color: red;">@error('screen_id'){{ $message }}@enderror</span>
+        </div>
+        <div>
             <label for="start_time_date">開始日</label>
             <input type="date" name="start_time_date" id="start_time_date">
             <span style="color: red;">@error('start_time'){{ $message }}@enderror</span>

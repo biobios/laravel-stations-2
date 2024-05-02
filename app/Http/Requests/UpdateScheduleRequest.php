@@ -33,6 +33,7 @@ class UpdateScheduleRequest extends FormRequest
 
         $validate += [
             'movie_id' => ['required'],
+            'screen_id' => ['required'],
         ];
 
         $validate += [
