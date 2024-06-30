@@ -22,8 +22,8 @@
         @foreach ($reservations as $reservation)
             <tr>
                 <td>{{$reservation->id}}</td>
-                <td>{{$reservation->name}}</td>
-                <td>{{$reservation->email}}</td>
+                <td>{{$reservation->user->name}}</td>
+                <td>{{$reservation->user->email}}</td>
                 <td>{{$reservation->schedule->movie->title}}</td>
                 <td>{{$reservation->schedule->start_time}}</td>
                 <td>{{$reservation->sheet->getFormattedLocationString("A1")}}</td>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\Schedule;
 use App\Models\Sheet;
+use App\Models\User;
 use App\Http\Requests\CreateAdminReservationRequest;
 use App\Http\Requests\UpdateAdminReservationRequest;
 
@@ -14,7 +15,7 @@ class AdminReservationController extends Controller
     public function index()
     {
         $reservations =
-            Reservation::with('schedule.movie')
+            Reservation::with(['schedule.movie', 'user'])
             ->whereHas('schedule', function($query) {
                 $query->where('end_time', '>', now());
             })->get();
@@ -25,7 +26,8 @@ class AdminReservationController extends Controller
     {
         $schedules = Schedule::with('movie')->get();
         $sheets = Sheet::all();
-        return view('admin.reservations.create', compact('schedules', 'sheets'));
+        $users = User::all();
+        return view('admin.reservations.create', compact('schedules', 'sheets', 'users'));
     }
 
     public function store(CreateAdminReservationRequest $request)
@@ -38,7 +40,8 @@ class AdminReservationController extends Controller
     {
         $sheets = Sheet::all();
         $schedules = Schedule::with('movie')->get();
-        return view('admin.reservations.show', compact('reservation', 'sheets', 'schedules'));
+        $users = User::all();
+        return view('admin.reservations.show', compact('reservation', 'sheets', 'schedules', 'users'));
     }
 
     public function update(Reservation $reservation, UpdateAdminReservationRequest $request)

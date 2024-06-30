@@ -36,6 +36,7 @@ class CreateAdminReservationRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => ['required'],
             'movie_id' => ['required'],
             'date' => ['required', 'date_format:Y-m-d'],
             'schedule_id' => ['required'],

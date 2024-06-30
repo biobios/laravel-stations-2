@@ -13,6 +13,7 @@ class ReservationController extends Controller
 {
     public function create(Movie $movie, Schedule $schedule, ShowReservationPageRequest $request)
     {
+        $user = $request->user();
         $sheet = Sheet::findOrFail($request->sheet_id);
 
         if(Reservation::where('sheet_id', $sheet->id)->where('schedule_id', $schedule->id)->exists()) {
@@ -20,7 +21,7 @@ class ReservationController extends Controller
             abort(400);    
         }
         
-        return view('reservations.create', compact('movie', 'schedule', 'sheet'));
+        return view('reservations.create', compact('movie', 'schedule', 'sheet', 'user'));
     }
 
     public function store(CreateReservationRequest $request)

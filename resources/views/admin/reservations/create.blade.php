@@ -9,6 +9,13 @@
 <h1>新規予約</h1>
 <form action="/admin/reservations" method="post">
     @csrf
+    <label for="user_id">ユーザー</label>
+    <select name="user_id" id="user_id">
+        @foreach ($users as $user)
+            <option value="{{$user->id}}">{{$user->name}} : {{$user->email}}</option>
+        @endforeach
+    </select>
+    <span style="color:red">{{$errors->first('user_id')}}</span>
     <label for="schedule_id">スケジュール</label>
     <select name="schedule_id" id="schedule_id">
         @foreach ($schedules as $schedule)

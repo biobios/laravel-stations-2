@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         
+        $this->call(SheetTableSeeder::class);
         $this->call(ScreenTableSeeder::class);
         Practice::factory(10)->create();
 //        Movie::factory(25)->create();
         Schedule::factory(50)->create();
 
-        $this->call(SheetTableSeeder::class);
     }
 }

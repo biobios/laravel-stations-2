@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Schedule;
+use App\Models\Sheet;
+use App\Models\User;
 
 class Reservation extends Model
 {
@@ -14,8 +16,7 @@ class Reservation extends Model
         'date',
         'schedule_id',
         'sheet_id',
-        'email',
-        'name',
+        'user_id',
     ];
 
     public function schedule()
@@ -26,5 +27,10 @@ class Reservation extends Model
     public function sheet()
     {
         return $this->belongsTo(Sheet::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

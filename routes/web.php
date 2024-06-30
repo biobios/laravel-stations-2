@@ -37,13 +37,13 @@ Route::get('/getPractice', [PracticeController::class, 'getPractice']);
 Route::prefix('/movies')->group(function () {
     Route::get('/', [MovieController::class, 'index']);
     Route::get('/{movie}', [MovieController::class, 'show']);
-    Route::get('/{movie}/schedules/{schedule}/sheets', [ReservationController::class, 'sheets']);
-    Route::get('/{movie}/schedules/{schedule}/reservations/create', [ReservationController::class, 'create']);
 });
 
 Route::get('/sheets', [SheetController::class, 'index']);
 
-Route::post('/reservations/store', [ReservationController::class, 'store']);
+Route::get('/movies/{movie}/schedules/{schedule}/sheets', [ReservationController::class, 'sheets']);
+Route::get('/movies/{movie}/schedules/{schedule}/reservations/create', [ReservationController::class, 'create'])->middleware('auth');
+Route::post('/reservations/store', [ReservationController::class, 'store'])->middleware('auth');
 
 Route::prefix('/admin')->group(function () {
     Route::prefix('/movies')->group(function () {
